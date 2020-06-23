@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.0)
+project(AnalysisActiveNet)
+include_directories(./Include/)
+link_directories(./Lib/x64/)
+link_libraries(Packet.lib wpcap.lib)
+SET(SOURCE_FILE ./basic_dump.cpp)
+SET(PROTO_SOURCE ./MacAddrAnalysis.cpp ./NetProtoPrint.cpp)
+add_executable(AnalysisNet ${SOURCE_FILE} ${PROTO_SOURCE})
