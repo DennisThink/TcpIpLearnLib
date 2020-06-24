@@ -3,4 +3,5 @@
 #include <string>
 #include "NetProtoStruct.h"
 std::string MacAddrToString(const MacAddrHeader& macAddr);
+std::string IpV4AddrToString(const IpV4AddrHeader& ip);
 #endif

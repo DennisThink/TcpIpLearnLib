@@ -65,3 +65,79 @@ std::string MacAddrToString(const MacAddrHeader& header)
     }
     return strResult;
 }
+
+std::string V4AddrToString(const unsigned int v4Addr)
+{
+    unsigned int nCopy = v4Addr;
+    unsigned char * pData=reinterpret_cast<unsigned char *>(&nCopy);
+    char buff[32]={0};
+    sprintf(buff,"%d.%d.%d.%d",pData[0],pData[1],pData[2],pData[3]);
+    return std::string(buff);
+}
+
+std::string IpV4AddrToString(const IpV4AddrHeader& ip)
+{
+    std::string strResult;
+    //Version and HeaderLength
+    int nHeaderLength = 0;
+    {
+        strResult = strResult + " Version: ";
+        strResult = strResult + std::to_string((ip.m_VersionHeaderLength&0xF0)>>4);
+
+        strResult = strResult + " HeaderLen: ";
+        strResult = strResult + std::to_string(4*(ip.m_VersionHeaderLength&0x0F));
+    }
+
+    //TOS
+    {
+        strResult = strResult + " TOS: ";
+        strResult = strResult + std::to_string(ip.m_Tos);
+    }
+
+    //IP Length
+    {
+        strResult = strResult + " IpDataLength: ";
+        strResult = strResult + std::to_string(ip.m_totalLength);
+    }
+
+    //Identification
+    {
+        strResult = strResult + " IpIdentify: ";
+        strResult = strResult + std::to_string(ip.m_identification);
+    }
+
+    //flags
+    {
+        strResult = strResult + " Flags: ";
+        strResult = strResult + std::to_string(ip.m_flagsFragmentOffSet&0xE000);
+
+
+    }
+
+    //TTL and Protocol
+    {
+        strResult = strResult + " TTL: ";
+        strResult = strResult + std::to_string(ip.m_ttl);
+
+        strResult = strResult + " Protocol: ";
+        strResult = strResult + std::to_string(ip.m_proto); 
+    }
+
+    //Check Sum
+    {
+        strResult = strResult + " CheckSum: ";
+        strResult = strResult + std::to_string(ip.m_headerCheckSum);
+    }
+
+    //IP source address
+    {
+        strResult = strResult + " SrcAddr: "+V4AddrToString(ip.m_srcIpAddr);
+    }
+
+    //Ip destination address
+    {
+        strResult = strResult + " DstAddr: "+V4AddrToString(ip.m_dstIpAddr);
+    }
+
+    return strResult;
+}

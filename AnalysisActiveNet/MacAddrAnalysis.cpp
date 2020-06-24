@@ -26,6 +26,16 @@ void AnalysisMacAddr(const struct pcap_pkthdr *header, const unsigned char *pkt_
         memcpy(&Header,pkt_data,sizeof(MacAddrHeader));
 		Header.m_type = ntohs(Header.m_type);
         std::cout<<MacAddrToString(Header)<<std::endl;
+		if( (0x0800 == Header.m_type) && 
+		    (header->len > sizeof(MacAddrHeader)+sizeof(IpV4AddrHeader)) )
+		{
+			IpV4AddrHeader v4Header;
+			memcpy(&v4Header,pkt_data+sizeof(MacAddrHeader),sizeof(IpV4AddrHeader));
+			{
+				v4Header.m_totalLength = ntohs(v4Header.m_totalLength);
+			}
+			std::cout<<IpV4AddrToString(v4Header)<<std::endl;
+		}
     }
 }
 
